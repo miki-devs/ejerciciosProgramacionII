@@ -1,10 +1,10 @@
 import sys
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QLabel, QLineEdit, QGridLayout, QPushButton,
-    QHBoxLayout, QVBoxLayout, QDateEdit, QMessageBox
+    QVBoxLayout, QDateEdit, QMessageBox
 )
 from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtGui import QPixmap
+
 
 
 class VentanaFormulario(QWidget):
