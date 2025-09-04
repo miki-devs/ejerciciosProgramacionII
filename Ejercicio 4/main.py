@@ -1,9 +1,7 @@
 # ------------------------- IMPORTS ------------------------
 
 import sys
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QTextEdit, QMenuBar, 
-                             QAction, QFileDialog, QMessageBox, QStatusBar,
-                             QVBoxLayout, QWidget, QDesktopWidget)
+from PyQt5.QtWidgets import (QApplication, QFontDialog, QMainWindow, QTextEdit, QAction, QFileDialog, QMessageBox, QStatusBar, QDesktopWidget, QColorDialog)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence
 
@@ -23,6 +21,7 @@ class EditorTexto(QMainWindow):
         self.__posicionEjeY = (self.__alto - self.__altoVentana) // 2
         self.setGeometry(self.__posicionEjeX, self.__posicionEjeY, 
                          self.__anchoVentana, self.__altoVentana)
+        #------------------------------------------------------------
         self.editor = QTextEdit()
         self.setCentralWidget(self.editor)
         self.editor.setPlaceholderText("Escriba su texto aquí...")
@@ -38,7 +37,7 @@ class EditorTexto(QMainWindow):
         
         # Distintos menúes dentro de la barra
         menuArchivo = menuBar.addMenu("Archivo")
-        menuEditar = menuBar.addMenu("Editar")
+        menuEditar = menuBar.addMenu("Edición")
         menuAyuda = menuBar.addMenu("Ayuda")
         
         # Acciones del menú Archivo
@@ -79,6 +78,16 @@ class EditorTexto(QMainWindow):
         accionPegar.setShortcut(QKeySequence.Paste)
         accionPegar.triggered.connect(self.pegarTexto)
         menuEditar.addAction(accionPegar)
+        
+        accionElegirFuente = QAction("Elegir fuente", self)
+        accionElegirFuente.setShortcut("Ctrl+Shift+F")
+        accionElegirFuente.triggered.connect(self.elegirFuente)
+        menuEditar.addAction(accionElegirFuente)
+        
+        accionElegirColor = QAction("Elegir color de texto", self)
+        accionElegirColor.setShortcut("Ctrl+Shift+C")
+        accionElegirColor.triggered.connect(self.elegirColor)
+        menuEditar.addAction(accionElegirColor)
         
         menuEditar.addSeparator()
         
@@ -160,6 +169,15 @@ class EditorTexto(QMainWindow):
     
     def pegarTexto(self):
         self.editor.paste()
+        
+    def elegirColor(self):
+        self.editor.setTextColor(QColorDialog.getColor(Qt.white, self, "Seleccione un color:"))
+    
+    def elegirFuente(self):
+        fuente, ok = QFontDialog.getFont(self.editor.font(), self, "Seleccione una fuente:")
+        if ok:
+            self.editor.setFont(fuente)
+            self.statusBar().showMessage(f"Fuente cambiada a: {fuente.family()}, {fuente.pointSize()}pt")
     
     # -------------------------- MÉTODOS DE AYUDA --------------------------
     
