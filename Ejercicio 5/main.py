@@ -88,7 +88,7 @@ class SistemaDocentes(QMainWindow):
         widgetCentral.setLayout(layoutPrincipal)
         
         # Crear splitter para dividir la pantalla
-        splitter = QSplitter(Qt.Horizontal)
+        splitter = QSplitter(Qt.Horizontal) # type: ignore
         layoutPrincipal.addWidget(splitter)
         
         # Panel izquierdo: Formulario y botones
@@ -225,7 +225,7 @@ class SistemaDocentes(QMainWindow):
                     if linea.strip():  # Ignorar líneas vacías
                         datos = linea.strip().split('|')
                         if len(datos) == 8:  # Verificar que tenga todos los campos
-                            self.agregar_a_lista(datos)
+                            self.agregarALista(datos)
                 QMessageBox.information(self, "Éxito", "Datos cargados correctamente.")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error al cargar datos:\n{e}")
@@ -236,7 +236,7 @@ class SistemaDocentes(QMainWindow):
             with open(self.archivoDatosDocentes, 'w', encoding='utf-8') as archivo:
                 for elemento in range(self.listaDocentes.count()):
                     item = self.listaDocentes.item(elemento)
-                    datos = item.data(Qt.UserRole)
+                    datos = item.data(Qt.UserRole) # type: ignore
                     linea = '|'.join(datos) + '\n'
                     archivo.write(linea)
             print("Los datos se guardaron correctamente.")
@@ -276,7 +276,7 @@ class SistemaDocentes(QMainWindow):
         """Agregar un docente a la lista"""
         datosDocente = f"{datos[2]}, {datos[1]} ({datos[0]})"  # Apellido, Nombre (Legajo)
         item = QListWidgetItem(datosDocente)
-        item.setData(Qt.UserRole, datos)  # Guardar datos completos
+        item.setData(Qt.UserRole, datos)  # type: ignore # Guardar datos completos
         self.listaDocentes.addItem(item)
         
     def filtrarLista(self):
@@ -286,11 +286,11 @@ class SistemaDocentes(QMainWindow):
 
         for numero in range(self.listaDocentes.count()):
             docente = self.listaDocentes.item(numero)
-            datosDocente = docente.data(Qt.UserRole)
+            datosDocente = docente.data(Qt.UserRole) # type: ignore
             coincide = (textoABuscar in datosDocente[0].lower() or
                         textoABuscar in datosDocente[1].lower() or
                         textoABuscar in datosDocente[2].lower())
-            docente.setHidden(not coincide)
+            docente.setHidden(not coincide) # type: ignore
             if coincide:
                 huboCoincidencias = True
 
@@ -300,7 +300,7 @@ class SistemaDocentes(QMainWindow):
         
     def mostrarDetalles(self, item):
         """Mostrar detalles del docente seleccionado"""
-        datos = item.data(Qt.UserRole)
+        datos = item.data(Qt.UserRole) # type: ignore
         detalles = f"""
         INFORMACIÓN DEL DOCENTE
         ========================
@@ -324,7 +324,7 @@ class SistemaDocentes(QMainWindow):
 
         for elemento in range(self.listaDocentes.count()):
             docente = self.listaDocentes.item(elemento)
-            datos = docente.data(Qt.UserRole)
+            datos = docente.data(Qt.UserRole) # type: ignore
             if datos[0].lower() == legajo.lower():
                 self.listaDocentes.setCurrentItem(docente)
                 self.mostrarDetalles(docente)
@@ -339,7 +339,7 @@ class SistemaDocentes(QMainWindow):
             QMessageBox.warning(self, 'Error', 'Seleccione un docente para modificar')
             return
         
-        datos = itemActual.data(Qt.UserRole)
+        datos = itemActual.data(Qt.UserRole) # type: ignore
         self.legajoEdit.setText(datos[0])
         self.nombreEdit.setText(datos[1])
         self.apellidoEdit.setText(datos[2])
@@ -368,7 +368,7 @@ class SistemaDocentes(QMainWindow):
             self.categoriaCombo.currentText()
         ]
 
-        item.setData(Qt.UserRole, datos)
+        item.setData(Qt.UserRole, datos) # type: ignore
         item.setText(f"{datos[2]}, {datos[1]} ({datos[0]})")
         
         self.guardarDatos()
@@ -386,7 +386,7 @@ class SistemaDocentes(QMainWindow):
             QMessageBox.warning(self, 'Error', 'Seleccione un docente para eliminar')
             return
         
-        datos = itemActual.data(Qt.UserRole)
+        datos = itemActual.data(Qt.UserRole) # type: ignore
         respuesta = QMessageBox.question(self, 'Confirmar eliminación',
                                        f'¿Está seguro de eliminar a {datos[1]} {datos[2]}?',
                                        QMessageBox.Yes | QMessageBox.No)
@@ -421,7 +421,7 @@ class SistemaDocentes(QMainWindow):
                     arch.write("Legajo, Nombre, Apellido, DNI, Email, Teléfono, Materia, Categoría\n")
                     for elemento in range(self.listaDocentes.count()):
                         item = self.listaDocentes.item(elemento)
-                        datos = item.data(Qt.UserRole)
+                        datos = item.data(Qt.UserRole) # type: ignore
                         linea = ','.join(datos) + '\n'
                         arch.write(linea)
                 QMessageBox.information(self, 'Éxito', f'Datos exportados a {archivo}')
@@ -432,7 +432,7 @@ class SistemaDocentes(QMainWindow):
         """Verificar si ya existe un docente con el legajo dado"""
         for elemento in range(self.listaDocentes.count()):
             item = self.listaDocentes.item(elemento)
-            datos = item.data(Qt.UserRole)
+            datos = item.data(Qt.UserRole) # type: ignore
             if datos[0].lower() == legajo.lower():
                 return True
         return False
